@@ -27,30 +27,32 @@ inline float* read_device_vec(const char* path, int n) {
     return d;
 }
 
-// Print n device float32 values to stdout as space-separated values followed by newline.
-__global__ void print_kernel(float* d, int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%.8g", d[i]);
-        if (i < n - 1) printf(" ");
-    }
-    printf("\n");
-}
-
-inline void print_device_vec(float* d, int n) {
-    // Host stdio and CUDA printf use separate buffers on Windows. Publish any
-    // preceding host result (e.g. CHECK's failure flag) before the device row.
-    fflush(stdout);
-    print_kernel<<<1,1>>>(d, n);
-    cudaDeviceSynchronize();
-}
-
 // Print n host float32 values to stdout.
 inline void print_host_vec(float* h, int n) {
     for (int i = 0; i < n; i++) {
-        printf("%.8g", h[i]);
+        // Preserve NaNs in a spelling NumPy can read on every host CRT.
+        if (h[i] != h[i]) printf("nan");
+        else printf("%.8g", h[i]);
         if (i < n - 1) printf(" ");
     }
     printf("\n");
+    fflush(stdout);  // Keep this row ahead of any subsequent device-printf row.
+}
+
+// Copy before printing: CUDA's bounded printf FIFO truncates large matrices.
+// Host output also keeps CHECK flags and following vector rows in order.
+inline void print_device_vec(float* d, int n) {
+    if (n == 0) { printf("\n"); return; }
+    float* h = (float*)malloc(n * sizeof(float));
+    if (!h) { fprintf(stderr, "malloc failed\n"); exit(1); }
+    cudaError_t error = cudaMemcpy(h, d, n * sizeof(float), cudaMemcpyDeviceToHost);
+    if (error != cudaSuccess) {
+        fprintf(stderr, "Cannot copy test result: %s\n", cudaGetErrorString(error));
+        free(h);
+        exit(1);
+    }
+    print_host_vec(h, n);
+    free(h);
 }
 
 // Convenience: alloc n floats on device, zero-initialized.

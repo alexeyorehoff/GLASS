@@ -58,15 +58,15 @@ int main(int argc, char** argv) {
         print_device_vec(dy, yl);
     } else if (strcmp(op,"syrk")==0) {
         uint32_t R=atoi(argv[4]),C=atoi(argv[5]); bool tr=atoi(argv[6])!=0; float al=atof(argv[7]),be=atof(argv[8]);
-        uint32_t OUT = tr?C:R;
-        float* dA=read_device_vec(argv[9],R*C); float* dC=read_device_vec(argv[10],OUT*OUT);
+        uint32_t output_dim = tr?C:R;
+        float* dA=read_device_vec(argv[9],R*C); float* dC=read_device_vec(argv[10],output_dim*output_dim);
         bool ok=false;
         #define DS(RR,CC) if(!ok&&R==RR&&C==CC){syrk_tr<RR,CC>(s,th,tr,al,dA,be,dC);ok=true;}
         SYRK_SHAPES(DS)
         #undef DS
         if(!ok){fprintf(stderr,"bad syrk shape\n");return 1;}
         cudaError_t e=cudaDeviceSynchronize(); if(e!=cudaSuccess){fprintf(stderr,"err %s\n",cudaGetErrorString(e));return 1;}
-        print_device_vec(dC, OUT*OUT);
+        print_device_vec(dC, output_dim*output_dim);
     } else { fprintf(stderr,"bad op\n"); return 1; }
     return 0;
 }

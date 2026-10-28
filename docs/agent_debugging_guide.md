@@ -510,3 +510,18 @@ Three bug classes introduced/dodged by the dispatch wrappers (`src/base/dispatch
    n=16 only; an unbounded table entry would have routed n=4096 onto one warp.
    tune.py's `_body_expr` bounds every verdict at the largest measured N
    (beyond it -> block) — keep that property if you touch the emitter.
+
+## Native Windows test and documentation output
+
+- Include `<cassert>` at global scope in the umbrella header. The NVIDIA
+  implementation headers are expanded inside namespaces; re-including the
+  MSVC assertion declarations there shadows CUDA's device `_wassert` and makes
+  otherwise valid device assertions fail compilation.
+- Transfer numerical test results to the host before printing them. CUDA's
+  bounded `printf` FIFO can truncate a 64-by-64 result without reporting a
+  kernel error. Host printing also preserves the order of a CHECK status and
+  its following vector; use a portable `nan` spelling for NumPy's parser.
+- Doxygen filters need an explicit Python interpreter on Windows. The API
+  inventory tool selects its own interpreter for the child process, writes
+  portable `/` paths and LF JSON, and rejects empty extracted inventories so
+  a failed filter cannot produce a successful `0/0` coverage report.

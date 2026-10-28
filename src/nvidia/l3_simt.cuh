@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <cassert>
 // types.cuh provides the `layout` enum used by the public glass::nvidia API.
 // glass.cuh (included by glass-nvidia.cuh) provides ::glass::gemm_impl_ct,
 // the SIMT GEMM core that this file delegates to per batch element.

@@ -32,6 +32,7 @@
 // declarations land at global scope. The re-includes inside the namespace below
 // are no-ops due to #pragma once.
 #include <cstdint>
+#include <cassert>
 #include <cub/cub.cuh>
 
 #ifdef __CUBLASDX_HPP__

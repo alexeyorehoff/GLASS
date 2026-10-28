@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <cassert>
 #include <cub/cub.cuh>
 
 // glass::nvidia L1 — CUB-backed reduce / dot / nrm2

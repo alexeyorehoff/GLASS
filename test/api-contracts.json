@@ -84,7 +84,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 205,
+          "line": 208,
           "name": "argreduce_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -194,7 +194,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 205,
+          "line": 208,
           "name": "argreduce_fast_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -1228,7 +1228,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 202,
+          "line": 205,
           "name": "dot_fast_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -1998,7 +1998,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 204,
+          "line": 207,
           "name": "iamax_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -2020,7 +2020,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 204,
+          "line": 207,
           "name": "iamax_fast_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -3648,7 +3648,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 215,
+          "line": 218,
           "name": "softmax_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -4484,7 +4484,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 209,
+          "line": 212,
           "name": "trmv_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -4572,7 +4572,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 206,
+          "line": 209,
           "name": "congruence_scratch_bytes",
           "surface": "glass::",
           "args": 0,
@@ -4858,7 +4858,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 218,
+          "line": 221,
           "name": "eigh_sweeps",
           "surface": "glass::",
           "args": 0,
@@ -5540,7 +5540,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 207,
+          "line": 210,
           "name": "gn_step_scratch_bytes",
           "surface": "glass::",
           "args": 0,
@@ -5628,7 +5628,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 213,
+          "line": 216,
           "name": "inv_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -5650,7 +5650,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 214,
+          "line": 217,
           "name": "inv_pivoted_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -5716,7 +5716,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 217,
+          "line": 220,
           "name": "inv_fused_scratch_bytes",
           "surface": "glass::",
           "args": 2,
@@ -5804,7 +5804,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 208,
+          "line": 211,
           "name": "inv_dense_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -5914,7 +5914,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 212,
+          "line": 215,
           "name": "ldlt_scratch_bytes",
           "surface": "glass::",
           "args": 1,
@@ -6552,7 +6552,7 @@
       "evidence": [
         {
           "file": "test/cuda/test_defaults.cu",
-          "line": 219,
+          "line": 222,
           "name": "syev_eps",
           "surface": "glass::",
           "args": 0,
@@ -13010,7 +13010,7 @@
       "id": "reduce-d3b0396b5927",
       "name": "reduce",
       "file": "src/nvidia/l1.cuh",
-      "line": 53,
+      "line": 52,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::reduce(T *x, T *s_scratch)",
       "params": 2,
@@ -13032,7 +13032,7 @@
       "id": "dot-cbdb3f49a9f0",
       "name": "dot",
       "file": "src/nvidia/l1.cuh",
-      "line": 86,
+      "line": 85,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::dot(T *x, T *y, T *out, T *s_scratch)",
       "params": 4,
@@ -13054,7 +13054,7 @@
       "id": "nrm2-409f244e1bc8",
       "name": "nrm2",
       "file": "src/nvidia/l1.cuh",
-      "line": 118,
+      "line": 117,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::nrm2(T *x, T *out, T *s_scratch)",
       "params": 3,
@@ -13076,7 +13076,7 @@
       "id": "reduce_scratch_bytes-161bd8c8e99f",
       "name": "reduce_scratch_bytes",
       "file": "src/nvidia/l1.cuh",
-      "line": 145,
+      "line": 144,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::reduce_scratch_bytes()",
       "params": 0,
@@ -13472,7 +13472,7 @@
       "id": "gemm_batched_1d-cf82da57b34c",
       "name": "gemm_batched_1d",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 76,
+      "line": 75,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_batched_1d(T alpha, T *const *A, T *const *B, T beta, T *const *C)",
       "params": 5,
@@ -13494,7 +13494,7 @@
       "id": "gemm_batched_1d_scratch_bytes-57a16b69ddc5",
       "name": "gemm_batched_1d_scratch_bytes",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 116,
+      "line": 115,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_batched_1d_scratch_bytes()",
       "params": 0,
@@ -13516,7 +13516,7 @@
       "id": "gemm_batched_1d_threads-5574bd39e64f",
       "name": "gemm_batched_1d_threads",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 130,
+      "line": 129,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_batched_1d_threads()",
       "params": 0,
@@ -13538,7 +13538,7 @@
       "id": "gemm_strided_batched_1d-d17451e5eb5f",
       "name": "gemm_strided_batched_1d",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 189,
+      "line": 188,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_strided_batched_1d(T alpha, const T *A_shared, T *B, T beta, T *C)",
       "params": 5,
@@ -13560,7 +13560,7 @@
       "id": "gemm_strided_batched_1d_scratch_bytes-3cd19cc3c573",
       "name": "gemm_strided_batched_1d_scratch_bytes",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 230,
+      "line": 229,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_strided_batched_1d_scratch_bytes()",
       "params": 0,
@@ -13582,7 +13582,7 @@
       "id": "gemm_strided_batched_1d_threads-9a76d81fa257",
       "name": "gemm_strided_batched_1d_threads",
       "file": "src/nvidia/l3_simt.cuh",
-      "line": 245,
+      "line": 244,
       "surface": "glass::nvidia::block::",
       "signature": "glass::nvidia::block::gemm_strided_batched_1d_threads()",
       "params": 0,

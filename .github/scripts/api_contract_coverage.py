@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -73,7 +74,19 @@ def ensure_xml(xml_dir: pathlib.Path) -> None:
     # Coverage must describe the current checkout, not whichever XML happens
     # to remain from the last local documentation build. Doxygen is fast for
     # this header-only tree, so regenerate the canonical XML every time.
-    subprocess.run(["doxygen", "Doxyfile"], cwd=ROOT / "docs", check=True)
+    if sys.platform == "win32":
+        # Doxygen invokes filters through the host shell; Windows cannot run
+        # the shebang in ./doxygen_filter.py. Use the current Python explicitly.
+        config = (ROOT / "docs" / "Doxyfile").read_text(encoding="utf-8")
+        command = f'{pathlib.Path(sys.executable).name} doxygen_filter.py'
+        config += f'\nFILTER_PATTERNS = *.cuh="{command}" *.cu="{command}"\n'
+        env = dict(os.environ)
+        env["PATH"] = str(pathlib.Path(sys.executable).parent) + os.pathsep + env.get("PATH", "")
+        env["PYTHONUTF8"] = "1"
+        subprocess.run(["doxygen", "-"], input=config, text=True,
+                       cwd=ROOT / "docs", env=env, check=True)
+    else:
+        subprocess.run(["doxygen", "Doxyfile"], cwd=ROOT / "docs", check=True)
 
 
 def public_location(raw: str) -> str | None:
@@ -286,7 +299,7 @@ def extract_calls(paths: list[pathlib.Path], api_names: set[str]) -> list[Call]:
                 continue
             calls.append(
                 Call(
-                    file=str(path.relative_to(ROOT)),
+                    file=path.relative_to(ROOT).as_posix(),
                     line=source.count("\n", 0, match.start()) + 1,
                     name=name,
                     surface=qualifier,
@@ -339,6 +352,8 @@ def main() -> int:
     ensure_xml(args.xml_dir)
     policy = json.loads(args.policy.read_text())
     contracts = load_contracts(args.xml_dir, policy)
+    if not contracts:
+        raise RuntimeError("Doxygen produced no public overloads; check input filters and XML output")
     evidence_paths = sorted((ROOT / "test" / "cuda").glob("*.cu"))
     evidence_paths += sorted((ROOT / "examples").glob("*.cu"))
     calls = extract_calls(evidence_paths, {c.name for c in contracts})
@@ -393,7 +408,7 @@ def main() -> int:
         "schema": 1,
         "basis": "Doxygen documented public overloads",
         "doxygen_version": doxygen_version(),
-        "policy": str(args.policy.relative_to(ROOT)),
+        "policy": args.policy.relative_to(ROOT).as_posix(),
         "contracts": [
             {
                 **contract.__dict__,
@@ -409,7 +424,7 @@ def main() -> int:
         },
     }
     if args.manifest:
-        args.manifest.write_text(json.dumps(payload, indent=2) + "\n")
+        args.manifest.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n")
     if args.json:
         args.json.write_text(
             json.dumps(
