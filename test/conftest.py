@@ -201,7 +201,7 @@ def compile_binary(name: str, build_dir: pathlib.Path, arch: str,
                    solver_fatbin: pathlib.Path | None = None) -> pathlib.Path:
     """Compile a CUDA test binary, skipping if the source hash is unchanged."""
     cu_src    = CUDA_DIR / f"{name}.cu"
-    out_bin   = build_dir / name
+    out_bin   = build_dir / (name + (".exe" if os.name == "nt" else ""))
     hash_file = build_dir / f"{name}.hash"
 
     # A source-only key can silently reuse sm_XX SASS on another GPU or retain
@@ -210,6 +210,7 @@ def compile_binary(name: str, build_dir: pathlib.Path, arch: str,
     identity = hashlib.sha256()
     identity.update(_hash_sources(cu_src).encode())
     identity.update(arch.encode())
+    identity.update(sys.platform.encode())
     identity.update("\0".join(extra_flags or []).encode())
     if solver_fatbin:
         identity.update(solver_fatbin.read_bytes())
@@ -231,6 +232,8 @@ def compile_binary(name: str, build_dir: pathlib.Path, arch: str,
         "-I", str(GLASS_DIR / "src"),
         "-I", str(CUDA_DIR),
     ]
+    if os.name == "nt":
+        common += ["-Xcompiler=/utf-8"]
     if solver_fatbin:
         # MathDx's host archive is x86-64-only. Its LTO-IR device fatbin is
         # architecture-neutral, so aarch64 uses the same three-stage link as
@@ -251,7 +254,7 @@ def compile_binary(name: str, build_dir: pathlib.Path, arch: str,
     for cmd in commands:
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
-            print(f"\nCompilation failed for {name}:\n{result.stderr}", file=sys.stderr)
+            print(f"\nCompilation failed for {name}:\n{result.stdout}\n{result.stderr}", file=sys.stderr)
             raise RuntimeError(f"nvcc failed for {name}")
     hash_file.write_text(current_hash)
     return out_bin

@@ -37,6 +37,9 @@ __global__ void print_kernel(float* d, int n) {
 }
 
 inline void print_device_vec(float* d, int n) {
+    // Host stdio and CUDA printf use separate buffers on Windows. Publish any
+    // preceding host result (e.g. CHECK's failure flag) before the device row.
+    fflush(stdout);
     print_kernel<<<1,1>>>(d, n);
     cudaDeviceSynchronize();
 }

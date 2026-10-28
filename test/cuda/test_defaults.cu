@@ -165,11 +165,14 @@ static_assert(glass::dispatch_body(op::dot, 32, false, 0u) == body::block, "unme
 // bare == block identity is pinned through an op with NO moved cells (the
 // moved names are now distinct wrapper entities; unmoved names must remain
 // the very same block:: functions via the using-directive).
-static_assert(&glass::symmetrize<float, 8, true> == &glass::block::symmetrize<float, 8, true>,
+static_assert(static_cast<void (*)(float *)>(&glass::symmetrize<float, 8, true>) ==
+              static_cast<void (*)(float *)>(&glass::block::symmetrize<float, 8, true>),
               "bare (unmoved) IS block");
 // tier aliases: glass::warp/thread are namespace aliases of block::warp/thread
-static_assert(&glass::warp::dot<float, 8>  == &glass::block::warp::dot<float, 8>,  "warp alias");
-static_assert(&glass::thread::dot<float, 8> == &glass::block::thread::dot<float, 8>, "thread alias");
+static_assert(static_cast<float (*)(float *, float *)>(&glass::warp::dot<float, 8>) ==
+              static_cast<float (*)(float *, float *)>(&glass::block::warp::dot<float, 8>), "warp alias");
+static_assert(static_cast<float (*)(const float *, const float *)>(&glass::thread::dot<float, 8>) ==
+              static_cast<float (*)(const float *, const float *)>(&glass::block::thread::dot<float, 8>), "thread alias");
 
 // ── public dependency policies ──
 constexpr auto native_potrf = glass::recommend<op::potrf, float, 8>();
